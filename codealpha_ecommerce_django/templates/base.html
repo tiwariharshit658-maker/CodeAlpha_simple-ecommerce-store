@@ -1,0 +1,36 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}CodeAlpha Store{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <script defer src="{% static 'js/main.js' %}"></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="nav-wrap">
+    <a class="brand" href="{% url 'home' %}"><span class="brand-mark">C</span> CodeAlpha <span class="brand-light">Store</span></a>
+    <nav>
+      <a href="{% url 'home' %}">Shop</a>
+      {% if user.is_authenticated %}<a href="{% url 'order_history' %}">My orders</a>{% endif %}
+      <a class="cart-link" href="{% url 'cart' %}">Cart <span class="cart-pill">{{ request.session.cart|length|default:0 }}</span></a>
+      {% if user.is_authenticated %}
+        <span class="nav-user">Hi, {{ user.username }}</span>
+        <form class="inline-form" action="{% url 'logout' %}" method="post">{% csrf_token %}<button class="nav-button" type="submit">Log out</button></form>
+      {% else %}
+        <a href="{% url 'login' %}">Log in</a><a class="nav-cta" href="{% url 'register' %}">Create account</a>
+      {% endif %}
+    </nav>
+  </div>
+</header>
+<main class="page-shell">
+  {% if messages %}
+  <div class="messages">{% for message in messages %}<div class="message {{ message.tags }}">{{ message }}</div>{% endfor %}</div>
+  {% endif %}
+  {% block content %}{% endblock %}
+</main>
+<footer class="site-footer"><div><a class="brand footer-brand" href="{% url 'home' %}">CodeAlpha <span class="brand-light">Store</span></a><p>A simple demo storefront built with Django.</p></div><span>© {% now "Y" %} CodeAlpha Store</span></footer>
+</body>
+</html>

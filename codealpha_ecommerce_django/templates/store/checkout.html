@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Checkout | CodeAlpha Store{% endblock %}
+{% block content %}
+<div class="page-heading"><span class="eyebrow">ALMOST YOURS</span><h1>Checkout</h1><p>Enter your delivery details to place the order.</p></div>
+<div class="cart-layout checkout-layout"><form class="checkout-form" method="post">{% csrf_token %}<h2>Delivery information</h2><label for="full_name">Full name</label><input id="full_name" name="full_name" required value="{{ request.user.get_full_name|default:request.user.username }}"><label for="email">Email address</label><input id="email" type="email" name="email" required value="{{ request.user.email }}"><label for="address">Delivery address</label><textarea id="address" name="address" rows="4" required placeholder="House/flat, street, city, state, PIN code"></textarea><div class="payment-note"><strong>Payment method</strong><span>Cash on delivery (demo)</span><small>No payment details are collected by this demo site.</small></div><button class="button button-dark full-button" type="submit">Place order · ₹{{ total }} <span>→</span></button></form>
+<aside class="order-summary"><h2>Your order</h2>{% for item in cart_items %}<div class="summary-product"><span>{{ item.quantity }} × {{ item.product.name }}</span><strong>₹{{ item.line_total }}</strong></div>{% endfor %}<div class="summary-total"><span>Total</span><strong>₹{{ total }}</strong></div></aside></div>
+{% endblock %}

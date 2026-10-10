@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Shop | CodeAlpha Store{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="hero-copy"><span class="eyebrow">THE EVERYDAY EDIT</span><h1>Good finds.<br><em>Better everyday.</em></h1><p>Thoughtfully picked essentials for your home, style and daily routine.</p><a class="button button-dark" href="#products">Explore products <span>↘</span></a></div>
+  <div class="hero-art"><div class="hero-circle"></div><div class="hero-tag">NEW SEASON<br><strong>ESSENTIALS</strong></div><img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1000" alt="Neutral clothing and accessories"></div>
+</section>
+<section class="section-head" id="products"><div><span class="eyebrow">CURATED FOR YOU</span><h2>Shop the collection</h2></div><form class="search-form" method="get"><input name="q" value="{{ query }}" placeholder="Search products..." aria-label="Search products"><button type="submit" aria-label="Search">⌕</button></form></section>
+<div class="filter-row"><a class="{% if not selected_category %}filter-active{% endif %}" href="{% url 'home' %}">All items</a>{% for category in categories %}<a class="{% if selected_category == category %}filter-active{% endif %}" href="?category={{ category|urlencode }}">{{ category }}</a>{% endfor %}</div>
+<section class="product-grid">
+{% for product in products %}
+<article class="product-card">
+  <a class="product-image" href="{% url 'product_detail' product.slug %}">
+    {% if product.image_url %}<img src="{{ product.image_url }}" alt="{{ product.name }}" loading="lazy">{% else %}<div class="image-placeholder">CA</div>{% endif %}
+    <span class="image-arrow">↗</span>
+  </a>
+  <div class="product-meta"><span>{{ product.category }}</span><span>{% if product.stock > 0 %}In stock{% else %}Sold out{% endif %}</span></div>
+  <a class="product-name" href="{% url 'product_detail' product.slug %}">{{ product.name }}</a>
+  <div class="product-bottom"><strong>₹{{ product.price }}</strong>
+  <form action="{% url 'add_to_cart' product.id %}" method="post">{% csrf_token %}<input type="hidden" name="next" value="cart"><button class="add-button" type="submit" {% if product.stock == 0 %}disabled{% endif %} aria-label="Add {{ product.name }} to cart">+</button></form></div>
+</article>
+{% empty %}<div class="empty-state"><h3>No products found</h3><p>Try another search or category.</p><a href="{% url 'home' %}">Clear filters</a></div>{% endfor %}
+</section>
+<section class="newsletter"><div><span class="eyebrow">A LITTLE GOOD NEWS</span><h2>Make room for good things.</h2><p>Discover useful finds for every day.</p></div><a class="button button-light" href="#products">Browse collection ↗</a></section>
+{% endblock %}

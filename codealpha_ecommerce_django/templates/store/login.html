@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block title %}Log in | CodeAlpha Store{% endblock %}
+{% block content %}
+<div class="auth-wrap"><div class="auth-aside"><span class="eyebrow">WELCOME BACK</span><h1>Good to see<br><em>you again.</em></h1><p>Log in to check your orders and pick up where you left off.</p></div><form class="auth-card" method="post">{% csrf_token %}<h2>Log in</h2><p class="muted">Enter your account details below.</p>{% if form.errors %}<p class="form-error">Username or password was not recognized. Try again.</p>{% endif %}<label for="{{ form.username.id_for_label }}">Username</label>{{ form.username }}<label for="{{ form.password.id_for_label }}">Password</label>{{ form.password }}{% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}<button class="button button-dark full-button" type="submit">Log in <span>→</span></button><p class="auth-switch">New here? <a href="{% url 'register' %}">Create an account</a></p></form></div>
+{% endblock %}

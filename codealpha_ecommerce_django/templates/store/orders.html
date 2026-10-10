@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}My orders | CodeAlpha Store{% endblock %}
+{% block content %}
+<div class="page-heading"><span class="eyebrow">YOUR ACCOUNT</span><h1>My orders</h1><p>Keep track of your recent purchases.</p></div>
+{% for order in orders %}<article class="order-card"><div class="order-card-head"><div><span class="eyebrow">ORDER #{{ order.id }}</span><h2>{{ order.created_at|date:"d M Y, H:i" }}</h2></div><span class="status-pill">{{ order.get_status_display }}</span></div><div class="order-items">{% for item in order.items.all %}<div><span>{{ item.quantity }} × {{ item.product_name }}</span><strong>₹{{ item.line_total }}</strong></div>{% endfor %}</div><div class="order-total"><span>Order total</span><strong>₹{{ order.total }}</strong></div><p class="order-address">Delivering to: {{ order.full_name }} · {{ order.address }}</p></article>
+{% empty %}<div class="empty-state"><div class="empty-icon">↗</div><h2>No orders yet</h2><p>Your next great find is waiting.</p><a class="button button-dark" href="{% url 'home' %}">Browse products</a></div>{% endfor %}
+{% endblock %}

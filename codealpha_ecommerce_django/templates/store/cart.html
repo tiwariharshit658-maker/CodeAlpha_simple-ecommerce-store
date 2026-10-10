@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Your cart | CodeAlpha Store{% endblock %}
+{% block content %}
+<div class="page-heading"><span class="eyebrow">YOUR SELECTION</span><h1>Shopping cart</h1><p>Good choices, all in one place.</p></div>
+{% if cart_items %}
+<div class="cart-layout"><section class="cart-list">
+{% for item in cart_items %}<article class="cart-item"><a class="cart-thumb" href="{% url 'product_detail' item.product.slug %}">{% if item.product.image_url %}<img src="{{ item.product.image_url }}" alt="{{ item.product.name }}">{% endif %}</a><div class="cart-item-info"><a class="product-name" href="{% url 'product_detail' item.product.slug %}">{{ item.product.name }}</a><span>{{ item.product.category }}</span><strong>₹{{ item.product.price }}</strong><form class="quantity-form" action="{% url 'update_cart' item.product.id %}" method="post">{% csrf_token %}<label for="qty-{{ item.product.id }}">Qty</label><input id="qty-{{ item.product.id }}" type="number" min="0" max="{{ item.product.stock }}" name="quantity" value="{{ item.quantity }}"><button type="submit" class="text-button">Update</button></form></div><div class="cart-line-total">₹{{ item.line_total }}<form action="{% url 'remove_from_cart' item.product.id %}" method="post">{% csrf_token %}<button class="remove-button" type="submit">Remove</button></form></div></article>{% endfor %}
+<a class="back-link" href="{% url 'home' %}">← Continue shopping</a></section>
+<aside class="order-summary"><h2>Order summary</h2><div class="summary-line"><span>Subtotal</span><strong>₹{{ total }}</strong></div><div class="summary-line"><span>Shipping</span><span>Calculated at delivery</span></div><div class="summary-total"><span>Total</span><strong>₹{{ total }}</strong></div><a class="button button-dark full-button" href="{% url 'checkout' %}">Continue to checkout <span>→</span></a><p class="summary-note">Demo checkout · Cash on delivery</p></aside></div>
+{% else %}<div class="empty-state cart-empty"><div class="empty-icon">♡</div><h2>Your cart is taking a breather.</h2><p>Add something you love and it will show up here.</p><a class="button button-dark" href="{% url 'home' %}">Start shopping ↗</a></div>{% endif %}
+{% endblock %}
